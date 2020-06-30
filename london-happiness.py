@@ -33,22 +33,61 @@ df = df.set_index('Year')
 for borough in boroughs:
     df[borough] = [score for score in satisfaction.loc[borough]]
 
-print(boroughs[1:33])
+
+def relative_chart():
+
+    print(boroughs[1:33])
+    print('')
+    finished = False
+
+    while not finished:
+        
+        choice = input('Choose a borough (or hit Enter to quit): ')
+        if choice == '':
+            finished = True
+            break
+
+        fig, ax = plt.subplots()
+        ax.plot(df[choice], label=choice, color='green')
+        ax.plot(df['London'], label='London', linestyle='--', color='red')
+        ax.plot(df['UK'], label='UK', linestyle='--', color='blue')
+        ax.set_title(str(meta['Personal well-being scores by Borough'][23])+' Average Score Per Year. Scored 0-10 (10 most satisfied)', loc='center', wrap=True)
+        plt.legend()
+        plt.show()
+
+
+def most_satisfied_borough(year):
+    max_borough = ''
+    highest = 0
+    for borough in boroughs[1:33]:
+        if str(df[borough].loc[year]) != 'nan':
+            if df[borough].loc[year] > highest:
+                highest = df[borough].loc[year]
+                max_borough = borough
+
+    print(max_borough, highest)
+
+
+def least_satisfied_borough(year):
+    min_borough = ''
+    lowest = 10
+    for borough in boroughs[1:33]:
+        if str(df[borough].loc[year]) != 'nan':
+            if df[borough].loc[year] < lowest:
+                lowest = df[borough].loc[year]
+                min_borough = borough
+
+    print(min_borough, lowest)
+
+print('Most satisfied')
+for year in years:
+    print(year, end=' ')
+    most_satisfied_borough(year)
+
 print('')
-finished = False
+print('Least satisfied')
+for year in years:
+    print(year, end=' ')
+    least_satisfied_borough(year)
 
-while not finished:
-    
-    choice = input('Choose a borough (or hit Enter to quit): ')
-    if choice == '':
-        finished = True
-        break
-
-    fig, ax = plt.subplots()
-    ax.plot(df[choice], label=choice, color='green')
-    ax.plot(df['London'], label='London', linestyle='--', color='red')
-    ax.plot(df['UK'], label='UK', linestyle='--', color='blue')
-    ax.set_title(str(meta['Personal well-being scores by Borough'][23])+' Average Score Per Year. Scored 0-10 (10 most satisfied)', loc='center', wrap=True)
-    plt.legend()
-    plt.show()
 
