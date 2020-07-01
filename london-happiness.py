@@ -17,16 +17,14 @@ anxiety = pd.read_excel(data, 5)
 
 #print(meta)
 
+### Satisfaction ###
+
 satisfaction = summary.iloc[:,1:10]
+
 boroughs = [b for b in satisfaction['Area'] if str(b) != 'nan']
+years = [year for year in range(2012, 2020)]
 
 satisfaction = satisfaction.set_index('Area')
-
-years = [year for year in range(2012, 2020)]
-isling = [score for score in satisfaction.loc['Islington']]
-walth = [score for score in satisfaction.loc['Waltham Forest']]
-
-
 df = pd.DataFrame({'Year': years}) 
 df = df.set_index('Year')
 
@@ -34,8 +32,9 @@ for borough in boroughs:
     df[borough] = [score for score in satisfaction.loc[borough]]
 
 
-def relative_chart():
+def satisfaction_chart():
 
+    print('')
     print(boroughs[1:33])
     print('')
     finished = False
@@ -79,15 +78,39 @@ def least_satisfied_borough(year):
 
     print(min_borough, lowest)
 
-print('Most satisfied')
-for year in years:
-    print(year, end=' ')
-    most_satisfied_borough(year)
 
-print('')
-print('Least satisfied')
-for year in years:
-    print(year, end=' ')
-    least_satisfied_borough(year)
+def scatter(borough_one, borough_two):
 
+    print(df[[borough_one, borough_two]])
+    fig, ax = plt.subplots()
+    plt.scatter(df[borough_one], df[borough_two], c=('red','blue','green','black','orange','purple','yellow','pink'))
+    plt.xlabel(borough_one)
+    plt.ylabel(borough_two)
+    plt.show()
+    
+
+
+def satisfaction_main():
+    print('Most satisfied')
+    for year in years:
+        print(year, end=' ')
+        most_satisfied_borough(year)
+
+    print('')
+    print('Least satisfied')
+    for year in years:
+        print(year, end=' ')
+        least_satisfied_borough(year)
+
+    satisfaction_chart()
+
+
+def main():
+    satisfaction_main()
+    #scatter('Bromley', 'Hounslow')
+ 
+
+
+if __name__ == '__main__':
+    main()
 
